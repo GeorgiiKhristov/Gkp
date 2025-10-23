@@ -1,0 +1,130 @@
+Код для алгоритма сортировки выбором для С++
+
+
+
+
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Функция для вывода массива на экран
+void printArray(const vector<int>& arr, const string& message = "") {
+    if (!message.empty()) {
+        cout << message;
+    }
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+// Основная функция сортировки выбором
+void selectionSort(vector<int>& arr) {
+    int n = arr.size();
+    
+    // Проходим по всем элементам массива, кроме последнего
+    for (int i = 0; i < n - 1; i++) {
+        // Предполагаем, что минимальный элемент находится на текущей позиции i
+        int minIndex = i;
+        
+        // Ищем минимальный элемент в оставшейся части массива (от i+1 до конца)
+        for (int j = i + 1; j < n; j++) {
+            // Если находим элемент меньше текущего минимального, обновляем minIndex
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        
+        // Если нашли элемент меньше текущего (на позиции i), меняем их местами
+        if (minIndex != i) {
+            // Меняем местами arr[i] и arr[minIndex]
+            int temp = arr[i];
+            arr[i] = arr[minIndex];
+            arr[minIndex] = temp;
+        }
+        
+        // Выводим промежуточное состояние массива после каждой итерации
+        cout << "После итерации " << i + 1 << ": ";
+        printArray(arr);
+    }
+}
+
+// Дополнительная версия функции с подсчетом операций
+void selectionSortWithCounters(vector<int>& arr) {
+    int n = arr.size();
+    int comparisons = 0; // Счетчик сравнений
+    int swaps = 0;       // Счетчик перестановок
+    
+    cout << "\n--- Подробная статистика ---" << endl;
+    
+    for (int i = 0; i < n - 1; i++) {
+        int minIndex = i;
+        
+        cout << "\nИтерация " << i + 1 << ":" << endl;
+        cout << "Ищем минимальный элемент в диапазоне [" << i + 1 << "..." << n << "]" << endl;
+        
+        for (int j = i + 1; j < n; j++) {
+            comparisons++;
+            cout << "  Сравниваем " << arr[j] << " с " << arr[minIndex];
+            
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+                cout << " - НОВЫЙ минимум: " << arr[minIndex] << endl;
+            } else {
+                cout << " - минимум не изменился" << endl;
+            }
+        }
+        
+        if (minIndex != i) {
+            swaps++;
+            cout << "Меняем местами " << arr[i] << " и " << arr[minIndex] << endl;
+            
+            int temp = arr[i];
+            arr[i] = arr[minIndex];
+            arr[minIndex] = temp;
+        } else {
+            cout << "Минимальный элемент уже на месте, перестановка не требуется" << endl;
+        }
+    }
+    
+    cout << "\n--- Итоговая статистика ---" << endl;
+    cout << "Всего сравнений: " << comparisons << endl;
+    cout << "Всего перестановок: " << swaps << endl;
+}
+
+int main() {
+    // Исходный массив для сортировки
+    vector<int> arr = {64, 25, 12, 22, 11};
+    
+    cout << "=== АЛГОРИТМ СОРТИРОВКИ ВЫБОРОМ ===" << endl;
+    cout << "Временная сложность: O(n²)" << endl;
+    cout << "Пространственная сложность: O(1)" << endl;
+    
+    // Выводим исходный массив
+    printArray(arr, "Исходный массив: ");
+    
+    // Создаем копию для демонстрации с подробной статистикой
+    vector<int> arrDetailed = arr;
+    
+    // Выполняем сортировку с подробной статистикой
+    selectionSortWithCounters(arrDetailed);
+    
+    cout << "\n=== Основная сортировка ===" << endl;
+    // Выполняем обычную сортировку
+    selectionSort(arr);
+    
+    // Выводим отсортированный массив
+    printArray(arr, "\nОтсортированный массив: ");
+    
+    // Демонстрация на другом массиве
+    cout << "\n=== Дополнительный пример ===" << endl;
+    vector<int> arr2 = {5, 2, 8, 1, 9, 3};
+    printArray(arr2, "Исходный массив 2: ");
+    selectionSort(arr2);
+    printArray(arr2, "Отсортированный массив 2: ");
+    
+    return 0;
+}
+
